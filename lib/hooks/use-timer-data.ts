@@ -9,9 +9,9 @@ interface ITimerConfig {
   updateWhenTargetAchieved?: boolean;
 }
 
-type TimerHookReturn = [ITimerConfig, Dispatch<SetStateAction<number>>, number];
+type TimerDataHookReturn = [ITimerConfig, Dispatch<SetStateAction<number>>, number];
 
-const useTimerData = (): TimerHookReturn => {
+const useTimerData = (): TimerDataHookReturn => {
   const [time, setTime] = useState<number>(0);
   const [timerData, setTimerData] = useState<ITimerConfig>({
     startValues: { seconds: time },

@@ -5,8 +5,8 @@ import Footer from '@/components/footer';
 import Header from '@/components/header';
 
 export const metadata: Metadata = {
-  title: 'timeless',
-  description: 'Timeless — simple and highly customizable timer',
+  title: 'laikas',
+  description: 'Laikas — simple and highly customizable timer',
 };
 
 export default function RootLayout({
@@ -16,11 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${dm_mono.className} text-foreground bg-background mx-auto flex h-[100vh] max-w-[900px] flex-col justify-between gap-5 px-4 py-10 antialiased`}
-      >
+      {process.env.NODE_ENV !== 'production' && (
+        <head>
+          <script crossOrigin="anonymous" src="https://unpkg.com/react-scan/dist/auto.global.js" />
+        </head>
+      )}
+      <body className={`${dm_mono.className} text-foreground bg-background antialiased`}>
         <Header />
-        <main>{children}</main>
+        <main className="mx-auto max-w-[600px] px-4">{children}</main>
         <Footer />
         <div className="bg-noise" />
       </body>
