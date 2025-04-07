@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Info } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 interface Props {
   time: number;
@@ -9,19 +9,22 @@ interface Props {
 }
 
 function TimeOptions({ time, setTime }: Props) {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === '1') setTime(time + 15);
-    if (e.key === '2') setTime(time + 300);
-    if (e.key === '3') setTime(time + 600);
-    if (e.key === '4') setTime(time + 1200);
-    if (e.key === '5') setTime(time + 3600);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === '1') setTime(time + 15);
+      if (e.key === '2') setTime(time + 300);
+      if (e.key === '3') setTime(time + 600);
+      if (e.key === '4') setTime(time + 1200);
+      if (e.key === '5') setTime(time + 3600);
 
-    if (e.key === '!') setTime(15 > time ? time - time : time - 15);
-    if (e.key === '@') setTime(300 > time ? time - time : time - 300);
-    if (e.key === '#') setTime(600 > time ? time - time : time - 600);
-    if (e.key === '$') setTime(1200 > time ? time - time : time - 1200);
-    if (e.key === '%') setTime(3600 > time ? time - time : time - 3600);
-  };
+      if (e.key === '!') setTime(15 > time ? time - time : time - 15);
+      if (e.key === '@') setTime(300 > time ? time - time : time - 300);
+      if (e.key === '#') setTime(600 > time ? time - time : time - 600);
+      if (e.key === '$') setTime(1200 > time ? time - time : time - 1200);
+      if (e.key === '%') setTime(3600 > time ? time - time : time - 3600);
+    },
+    [time, setTime],
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -29,7 +32,7 @@ function TimeOptions({ time, setTime }: Props) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [time]);
+  }, [handleKeyDown]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>, s: number) => {
     if (e.ctrlKey && time > 0) setTime(s > time ? time - time : time - s);

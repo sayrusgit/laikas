@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Precision, Timer, TimerEvent, TimerValues } from 'easytimer.js';
+import { type Precision, Timer, type TimerEvent, type TimerValues } from 'easytimer.js';
+import { useEffect, useState } from 'react';
 
 interface TimerHookConfig {
   startValues?: TimerValues;

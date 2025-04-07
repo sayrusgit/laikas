@@ -1,14 +1,14 @@
 'use client';
 
-import useTimer from '@/lib/hooks/use-timer';
-import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
-import useTimerData from '@/lib/hooks/use-timer-data';
-import React, { useCallback, useEffect, useState } from 'react';
 import Controls from '@/components/controls';
+import TimeOptions from '@/components/time-options';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
 import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
-import TimeOptions from '@/components/time-options';
+import useTimer from '@/lib/hooks/use-timer';
+import useTimerData from '@/lib/hooks/use-timer-data';
 import { cn } from '@/lib/utils';
+import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
+import React, { useEffect, useState } from 'react';
 
 export default function Home() {
   const [timerData, setTime, time] = useTimerData();
@@ -20,10 +20,17 @@ export default function Home() {
 
   useEffect(() => {
     timer.on('started', () => setIsTriggered(true));
+    timer.on('secondsUpdated', () => {
+      document.title = `${timer.getTimeValues().toString()} | laikas`;
+    });
+    timer.on('paused', () => {
+      document.title = 'paused | laikas';
+    });
 
     return () => {
       timer.removeAllEventListeners();
       setIsTriggered(false);
+      document.title = 'laikas';
     };
   }, [timer]);
 

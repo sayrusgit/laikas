@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
 type UseCurrentSoundReturn = [string | null, Dispatch<SetStateAction<string | null>>];
 

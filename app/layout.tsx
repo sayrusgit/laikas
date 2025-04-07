@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
-import { dm_mono } from '@/styles/fonts';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
+import { dm_mono } from '@/styles/fonts';
 
 export const metadata: Metadata = {
   title: 'laikas',

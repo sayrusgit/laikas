@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Pause, Play, RotateCcw, Settings, StepForward, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { type Dispatch, type SetStateAction, useCallback, useEffect } from 'react';
+import React, { type SetStateAction, useCallback, useEffect } from 'react';
 
 interface Props {
   isRunning: boolean;
@@ -11,7 +11,7 @@ interface Props {
   startTimer: () => void;
   pauseTimer: () => void;
   time: number;
-  setTime: Dispatch<SetStateAction<number>>;
+  setTime: React.Dispatch<SetStateAction<number>>;
 }
 
 function Controls({
@@ -90,4 +90,4 @@ function Controls({
   );
 }
 
-export default Controls;
+export default React.memo(Controls);
