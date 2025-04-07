@@ -1,14 +1,15 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import { Pause, Play, RotateCcw, Settings, StepForward, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Pause, Play, RotateCcw, Settings, StepForward, X } from 'lucide-react';
+import { motion } from 'motion/react';
 import Link from 'next/link';
+import { type Dispatch, type SetStateAction, useCallback, useEffect } from 'react';
 
 interface Props {
   isRunning: boolean;
   isPaused: boolean;
+  isTriggered: boolean;
   startTimer: () => void;
   pauseTimer: () => void;
-  stopTimer: () => void;
   time: number;
   setTime: Dispatch<SetStateAction<number>>;
 }
@@ -16,18 +17,21 @@ interface Props {
 function Controls({
   isRunning,
   isPaused,
+  isTriggered,
   startTimer,
   pauseTimer,
-  stopTimer,
   time,
   setTime,
 }: Props) {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') startTimer();
-    if (e.key === ' ' && !isPaused) pauseTimer();
-    if (e.key === ' ' && isPaused) startTimer();
-    if (e.key === 'Backspace') setTime(0);
-  };
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter') startTimer();
+      if (e.key === ' ' && !isPaused && isTriggered) pauseTimer();
+      if (e.key === ' ' && isPaused && isTriggered) startTimer();
+      if (e.key === 'Backspace') setTime(0);
+    },
+    [startTimer, pauseTimer, isPaused, setTime, isTriggered],
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -35,10 +39,15 @@ function Controls({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [startTimer, pauseTimer, isPaused, time]);
+  }, [handleKeyDown]);
 
   return (
-    <div className="flex justify-center gap-5">
+    <motion.div
+      className="flex justify-center gap-5"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: 'easeOut' }}
+    >
       {!isRunning && !isPaused && (
         <Button onClick={() => startTimer()} size="lg" disabled={!time}>
           <Play />
@@ -52,7 +61,7 @@ function Controls({
         </Button>
       )}
       {isRunning && !isPaused && (
-        <Button onClick={() => pauseTimer()} className="cursor-pointer rounded-full" size="lg">
+        <Button onClick={() => pauseTimer()} size="lg">
           <Pause />
           Pause
         </Button>
@@ -70,12 +79,14 @@ function Controls({
           Reset
         </Button>
       )}
-      <Link href="/settings">
-        <Button size="icon">
-          <Settings />
-        </Button>
-      </Link>
-    </div>
+      <motion.span whileTap={{ scale: 0.9 }}>
+        <Link href="/settings">
+          <Button size="icon">
+            <Settings />
+          </Button>
+        </Link>
+      </motion.span>
+    </motion.div>
   );
 }
 

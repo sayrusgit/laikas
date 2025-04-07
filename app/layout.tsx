@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {process.env.NODE_ENV !== 'production' && (
+      {process.env.NODE_ENV === 'development' && (
         <head>
           <script crossOrigin="anonymous" src="https://unpkg.com/react-scan/dist/auto.global.js" />
         </head>

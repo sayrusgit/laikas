@@ -16,6 +16,16 @@ export default function Home() {
   const [currentSound] = useCurrentSound();
   const [currentVolume] = useCurrentVolume();
   const [forceUpdate, setForceUpdate] = useState(false);
+  const [isTriggered, setIsTriggered] = useState(false);
+
+  useEffect(() => {
+    timer.on('started', () => setIsTriggered(true));
+
+    return () => {
+      timer.removeAllEventListeners();
+      setIsTriggered(false);
+    };
+  }, [timer]);
 
   useEffect(() => {
     if (isTargetAchieved) playAudio();
@@ -34,11 +44,6 @@ export default function Home() {
 
   const pauseTimer = () => {
     timer.pause();
-    setForceUpdate(!forceUpdate);
-  };
-
-  const stopTimer = () => {
-    timer.stop();
     setForceUpdate(!forceUpdate);
   };
 
@@ -85,11 +90,11 @@ export default function Home() {
       <Controls
         isRunning={timer.isRunning()}
         isPaused={timer.isPaused()}
+        isTriggered={isTriggered}
         time={time}
         setTime={setTime}
         pauseTimer={pauseTimer}
         startTimer={startTimer}
-        stopTimer={stopTimer}
       />
     </div>
   );

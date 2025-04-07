@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Info } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 interface Props {
   time: number;
@@ -10,10 +10,17 @@ interface Props {
 
 function TimeOptions({ time, setTime }: Props) {
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.shiftKey && e.code === 'KeyZ') setTime(time + 300);
-    if (e.shiftKey && e.code === 'KeyX') setTime(time + 600);
-    if (e.shiftKey && e.code === 'KeyC') setTime(time + 1200);
-    if (e.shiftKey && e.code === 'KeyV') setTime(time + 3600);
+    if (e.key === '1') setTime(time + 15);
+    if (e.key === '2') setTime(time + 300);
+    if (e.key === '3') setTime(time + 600);
+    if (e.key === '4') setTime(time + 1200);
+    if (e.key === '5') setTime(time + 3600);
+
+    if (e.key === '!') setTime(15 > time ? time - time : time - 15);
+    if (e.key === '@') setTime(300 > time ? time - time : time - 300);
+    if (e.key === '#') setTime(600 > time ? time - time : time - 600);
+    if (e.key === '$') setTime(1200 > time ? time - time : time - 1200);
+    if (e.key === '%') setTime(3600 > time ? time - time : time - 3600);
   };
 
   useEffect(() => {
@@ -30,34 +37,36 @@ function TimeOptions({ time, setTime }: Props) {
   };
 
   return (
-    <div className="flex items-center justify-center gap-4">
-      {process.env.NODE_ENV === 'development' && (
+    <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <div className="flex items-center gap-4">
         <Button className="h-6" onClick={(e) => handleClick(e, 1)} variant="outline">
-          0:01
+          0:15
         </Button>
-      )}
-      <Button className="h-6" onClick={(e) => handleClick(e, 300)} variant="outline">
-        5:00
-      </Button>
-      <Button className="h-6" onClick={(e) => handleClick(e, 600)} variant="outline">
-        10:00
-      </Button>
-      <Button className="h-6" onClick={(e) => handleClick(e, 1200)} variant="outline">
-        20:00
-      </Button>
-      <Button className="h-6" onClick={(e) => handleClick(e, 3600)} variant="outline">
-        60:00
-      </Button>
-      <TooltipProvider>
-        <Tooltip delayDuration={200}>
-          <TooltipTrigger asChild>
-            <Info className="text-muted-foreground h-4 w-4" />
-          </TooltipTrigger>
-          <TooltipContent align="start">
-            <p>Press Ctrl to decrease time</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+        <Button className="h-6" onClick={(e) => handleClick(e, 300)} variant="outline">
+          5:00
+        </Button>
+        <Button className="h-6" onClick={(e) => handleClick(e, 600)} variant="outline">
+          10:00
+        </Button>
+      </div>
+      <div className="flex items-center gap-4">
+        <Button className="h-6" onClick={(e) => handleClick(e, 1200)} variant="outline">
+          20:00
+        </Button>
+        <Button className="h-6" onClick={(e) => handleClick(e, 3600)} variant="outline">
+          60:00
+        </Button>
+        <TooltipProvider>
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+              <Info className="text-muted-foreground h-4 w-4" />
+            </TooltipTrigger>
+            <TooltipContent align="start">
+              <p>Press Ctrl to decrease time</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </div>
   );
 }
