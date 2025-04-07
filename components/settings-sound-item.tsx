@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Play } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { Play } from 'lucide-react';
+import type { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   playAudio: (filename: string) => void;

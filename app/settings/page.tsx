@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-import { Card } from '@/components/ui/card';
 import SettingsSoundItem from '@/components/settings-sound-item';
-import { sounds } from '@/lib/sounds';
-import { useCurrentSound } from '@/lib/hooks/use-current-sound';
+import { Card } from '@/components/ui/card';
 import SliderTicks from '@/components/ui/slider-ticks';
+import { useCurrentSound } from '@/lib/hooks/use-current-sound';
 import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
+import { sounds } from '@/lib/sounds';
+import React from 'react';
 
 function Page() {
   const [currentSound, setCurrentSound] = useCurrentSound();

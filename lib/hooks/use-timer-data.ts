@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Precision, TimerValues } from 'easytimer.js';
+import type { Precision, TimerValues } from 'easytimer.js';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
 interface ITimerConfig {
   startValues?: TimerValues;
