@@ -1,19 +1,18 @@
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
-type UseCurrentSoundReturn = [number, Dispatch<SetStateAction<number>>];
+type UseCurrentSoundReturn = [number | null, Dispatch<SetStateAction<number | null>>];
 
 export const useCurrentVolume = (): UseCurrentSoundReturn => {
-  const [currentVolume, setCurrentVolume] = useState<number>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('volume');
-      return stored !== null ? Number(stored) : 0.4;
-    }
-
-    return 0.4;
-  });
+  const [currentVolume, setCurrentVolume] = useState<number | null>(null);
 
   useEffect(() => {
-    localStorage.setItem('volume', String(currentVolume));
+    const stored = localStorage.getItem('volume');
+    if (stored !== null) setCurrentVolume(Number(stored));
+    else localStorage.setItem('volume', '0.5');
+  }, []);
+
+  useEffect(() => {
+    if (currentVolume !== null) localStorage.setItem('volume', String(currentVolume));
   }, [currentVolume]);
 
   return [currentVolume, setCurrentVolume];

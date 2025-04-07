@@ -4,14 +4,14 @@ import { Play } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface Props {
-  playAudio: (filename: string) => void;
+  handleAudio: (filename: string) => void;
   title: string;
   filename: string;
   currentSound: string | null;
   setCurrentSound: Dispatch<SetStateAction<string | null>>;
 }
 
-function SettingsSoundItem({ playAudio, title, filename, currentSound, setCurrentSound }: Props) {
+function SettingsSoundItem({ handleAudio, title, filename, currentSound, setCurrentSound }: Props) {
   const isCurrent = currentSound === filename;
 
   const handleClick = () => {
@@ -26,7 +26,7 @@ function SettingsSoundItem({ playAudio, title, filename, currentSound, setCurren
         <p>{title}</p>
         <Play
           className="size-3.5 cursor-pointer transition-all ease-in-out hover:size-4"
-          onClick={() => playAudio(filename)}
+          onClick={() => handleAudio(filename)}
         />
       </div>
       <Checkbox

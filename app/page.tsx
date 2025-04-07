@@ -4,8 +4,10 @@ import Controls from '@/components/controls';
 import TimeOptions from '@/components/time-options';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
 import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
+import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
 import useTimer from '@/lib/hooks/use-timer';
 import useTimerData from '@/lib/hooks/use-timer-data';
+import { playAudio } from '@/lib/lib';
 import { cn } from '@/lib/utils';
 import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
 import React, { useEffect, useState } from 'react';
@@ -13,8 +15,11 @@ import React, { useEffect, useState } from 'react';
 export default function Home() {
   const [timerData, setTime, time] = useTimerData();
   const [timer, isTargetAchieved] = useTimer(timerData);
+
   const [currentSound] = useCurrentSound();
   const [currentVolume] = useCurrentVolume();
+  const [repeats] = useSoundRepeats();
+
   const [forceUpdate, setForceUpdate] = useState(false);
   const [isTriggered, setIsTriggered] = useState(false);
 
@@ -35,13 +40,11 @@ export default function Home() {
   }, [timer]);
 
   useEffect(() => {
-    if (isTargetAchieved) playAudio();
+    if (isTargetAchieved) handleAudio();
   }, [isTargetAchieved]);
 
-  const playAudio = () => {
-    const audio = new Audio(`/audio/${currentSound}`);
-    audio.volume = currentVolume;
-    audio.play();
+  const handleAudio = () => {
+    playAudio(currentSound, currentVolume, repeats);
   };
 
   const startTimer = () => {

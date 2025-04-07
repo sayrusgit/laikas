@@ -1,21 +1,24 @@
 'use client';
 
 import SettingsSoundItem from '@/components/settings-sound-item';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import SliderTicks from '@/components/ui/slider-ticks';
+import SoundRepeatsItem from '@/components/ui/sound-repeats-item';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
 import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
+import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
+import { playAudio } from '@/lib/lib';
 import { sounds } from '@/lib/sounds';
 import React from 'react';
 
 function Page() {
   const [currentSound, setCurrentSound] = useCurrentSound();
   const [currentVolume, setCurrentVolume] = useCurrentVolume();
+  const [repeats, setRepeats] = useSoundRepeats();
 
-  const playAudio = (filename: string) => {
-    const audio = new Audio(`/audio/${filename}`);
-    audio.volume = currentVolume;
-    audio.play();
+  const handleAudio = (filename: string) => {
+    playAudio(filename, currentVolume);
   };
 
   return (
@@ -25,15 +28,23 @@ function Page() {
         <p className="text-center text-xl">sound volume</p>
         <div>
           <SliderTicks
-            value={[currentVolume * 10]}
+            value={[currentVolume ? currentVolume * 10 : 0]}
             onValueChange={(e) => setCurrentVolume(e[0] / 10)}
           />
+        </div>
+        <p className="text-center text-xl">sound repeats</p>
+        <div className="flex items-center justify-center gap-5">
+          <SoundRepeatsItem value={1} repeats={repeats} setRepeats={setRepeats} />
+          <SoundRepeatsItem value={2} repeats={repeats} setRepeats={setRepeats} />
+          <SoundRepeatsItem value={3} repeats={repeats} setRepeats={setRepeats} />
+          <SoundRepeatsItem value={5} repeats={repeats} setRepeats={setRepeats} />
+          <SoundRepeatsItem value={10} repeats={repeats} setRepeats={setRepeats} />
         </div>
         <p className="text-center text-xl">sound</p>
         <div className="flex flex-col justify-between gap-2">
           {sounds.map((sound) => (
             <SettingsSoundItem
-              playAudio={playAudio}
+              handleAudio={handleAudio}
               title={sound.title}
               filename={sound.filename}
               currentSound={currentSound}

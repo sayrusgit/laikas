@@ -42,22 +42,27 @@ function TimeOptions({ time, setTime }: Props) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
       <div className="flex items-center gap-4">
-        <Button className="h-6" onClick={(e) => handleClick(e, 1)} variant="outline">
-          0:15
+        {process.env.NODE_ENV === 'development' && (
+          <Button className="h-6" onClick={(e) => handleClick(e, 1)} variant="outline">
+            1s
+          </Button>
+        )}
+        <Button className="h-6" onClick={(e) => handleClick(e, 15)} variant="outline">
+          15s
         </Button>
         <Button className="h-6" onClick={(e) => handleClick(e, 300)} variant="outline">
-          5:00
+          5m
         </Button>
         <Button className="h-6" onClick={(e) => handleClick(e, 600)} variant="outline">
-          10:00
+          10m
         </Button>
       </div>
       <div className="flex items-center gap-4">
         <Button className="h-6" onClick={(e) => handleClick(e, 1200)} variant="outline">
-          20:00
+          20m
         </Button>
         <Button className="h-6" onClick={(e) => handleClick(e, 3600)} variant="outline">
-          60:00
+          60m
         </Button>
         <TooltipProvider>
           <Tooltip delayDuration={200}>
