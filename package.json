@@ -8,8 +8,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "bunx playwright test"
+    "lint": "next lint"
   },
   "packageManager": "bun@1.2.9",
   "dependencies": {

@@ -9,12 +9,9 @@ import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
 import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
 import { playAudio } from '@/lib/lib';
 import { sounds } from '@/lib/sounds';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
 function Page() {
-  const router = useRouter();
-
   const [currentSound, setCurrentSound] = useCurrentSound();
   const [currentVolume, setCurrentVolume] = useCurrentVolume();
   const [repeats, setRepeats] = useSoundRepeats();
@@ -24,7 +21,7 @@ function Page() {
   };
 
   return (
-    <div className="items-start">
+    <div>
       <h1 className="text-center text-2xl">settings</h1>
       <Card className="mt-5 p-4">
         <p className="text-center text-xl">sound volume</p>

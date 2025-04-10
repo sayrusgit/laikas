@@ -6,21 +6,30 @@ interface TimerHookConfig {
   target?: TimerValues;
   precision?: Precision;
   countdown?: boolean;
-  updateWhenTargetAchieved?: boolean;
 }
 
-type TimerHookReturn = [Timer, boolean];
+type TimerHookReturn = [
+  Timer,
+  { isTargetAchieved: boolean; isRunning: boolean; isPaused: boolean; isTriggered: boolean },
+];
+
+const UNITS_TO_SAVE = ['days', 'hours', 'minutes', 'seconds', 'secondTenths'];
 
 const useTimer = ({
   startValues,
   target,
   precision,
   countdown,
-  updateWhenTargetAchieved,
 }: TimerHookConfig = {}): TimerHookReturn => {
-  const unitsToSave = ['days', 'hours', 'minutes', 'seconds', 'secondTenths'];
-
+  const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isTriggered, setIsTriggered] = useState(false);
   const [isTargetAchieved, setIsTargetAchieved] = useState(false);
+
+  const updateCallback = (timer: Timer) => {
+    setTimerValues(timer.getTimeValues().toString(UNITS_TO_SAVE));
+  };
+
   const [, setTimerValues] = useState<string>();
   const [timer, setTimer] = useState<Timer>(() => {
     return new Timer({
@@ -28,9 +37,7 @@ const useTimer = ({
       target,
       precision,
       countdown,
-      callback: (t) => {
-        setTimerValues(t.getTimeValues().toString(unitsToSave));
-      },
+      callback: updateCallback,
     });
   });
 
@@ -40,37 +47,59 @@ const useTimer = ({
       target,
       precision,
       countdown,
-      callback: (t) => {
-        setTimerValues(t.getTimeValues().toString(unitsToSave));
-      },
+      callback: updateCallback,
     });
 
-    const updateCallback = (e: TimerEvent) => {
-      setTimerValues(e.detail.timer.getTimeValues().toString(unitsToSave));
+    const onStarted = (e: TimerEvent) => {
+      updateCallback(e.detail.timer);
+
+      setIsTargetAchieved(false);
+      setIsRunning(timer.isRunning());
+      setIsPaused(timer.isPaused());
+      setIsTriggered(true);
     };
 
-    const onTargetAchieved = () => setIsTargetAchieved(true);
-    const onStarted = (e: TimerEvent) => {
-      updateCallback(e);
-      setIsTargetAchieved(false);
+    const onPaused = () => {
+      setIsRunning(false);
+      setIsPaused(true);
+    };
+
+    const onStop = () => {
+      setIsRunning(false);
+      setIsPaused(false);
+      setIsTriggered(false);
+    };
+
+    const onTargetAchieved = () => {
+      setIsTargetAchieved(true);
+    };
+
+    const onTimeUpdated = (e: TimerEvent) => {
+      setTimerValues(timer.getTimeValues().toString(UNITS_TO_SAVE));
+
+      setIsRunning(timer.isRunning());
+      setIsPaused(timer.isPaused());
+
+      document.title = `${newTimer.getTimeValues().toString()} | laikas`;
     };
 
     newTimer.on('started', onStarted);
-    newTimer.on('reset', onStarted);
-
-    if (updateWhenTargetAchieved) {
-      newTimer.on('targetAchieved', onTargetAchieved);
-    }
+    newTimer.on('paused', onPaused);
+    newTimer.on('stopped', onStop);
+    newTimer.on('secondsUpdated', onTimeUpdated);
+    newTimer.on('targetAchieved', onTargetAchieved);
 
     setTimer(newTimer);
 
     return () => {
       newTimer.stop();
       newTimer.removeAllEventListeners();
-    };
-  }, [startValues, target, precision, countdown, updateWhenTargetAchieved]);
 
-  return [timer, isTargetAchieved];
+      document.title = 'laikas';
+    };
+  }, [startValues, target, precision, countdown]);
+
+  return [timer, { isTargetAchieved, isRunning, isPaused, isTriggered }];
 };
 
 export default useTimer;

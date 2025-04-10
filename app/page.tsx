@@ -2,7 +2,6 @@
 
 import Controls from '@/components/controls';
 import TimeOptions from '@/components/time-options';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
 import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
 import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
@@ -12,51 +11,29 @@ import { playAudio } from '@/lib/lib';
 import { cn } from '@/lib/utils';
 import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
 import { CircleHelp } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import React, { useEffect } from 'react';
 
 export default function Home() {
   const [timerData, setTime, time] = useTimerData();
-  const [timer, isTargetAchieved] = useTimer(timerData);
+  const [timer, state] = useTimer(timerData);
 
   const [currentSound] = useCurrentSound();
   const [currentVolume] = useCurrentVolume();
   const [repeats] = useSoundRepeats();
 
-  const [forceUpdate, setForceUpdate] = useState(false);
-  const [isTriggered, setIsTriggered] = useState(false);
-
   useEffect(() => {
-    timer.on('started', () => setIsTriggered(true));
-    timer.on('secondsUpdated', () => {
-      document.title = `${timer.getTimeValues().toString()} | laikas`;
-    });
-    timer.on('paused', () => {
-      document.title = 'paused | laikas';
-    });
-
-    return () => {
-      timer.removeAllEventListeners();
-      setIsTriggered(false);
-      document.title = 'laikas';
-    };
-  }, [timer]);
-
-  useEffect(() => {
-    if (isTargetAchieved) handleAudio();
-  }, [isTargetAchieved]);
-
-  const handleAudio = () => {
-    playAudio(currentSound, currentVolume, repeats);
-  };
+    if (state.isTargetAchieved) {
+      playAudio(currentSound, currentVolume, repeats);
+    }
+  }, [state.isTargetAchieved]);
 
   const startTimer = () => {
     timer.start();
-    setForceUpdate(!forceUpdate);
   };
 
   const pauseTimer = () => {
     timer.pause();
-    setForceUpdate(!forceUpdate);
   };
 
   return (
@@ -103,16 +80,18 @@ export default function Home() {
         <Controls
           isRunning={timer.isRunning()}
           isPaused={timer.isPaused()}
-          isTriggered={isTriggered}
+          isTriggered={state.isTriggered}
           time={time}
           setTime={setTime}
           pauseTimer={pauseTimer}
           startTimer={startTimer}
         />
-        <div className="text-muted-foreground flex items-center gap-2">
-          <CircleHelp className="h-4 w-4" />
-          <p>help</p>
-        </div>
+        <Link href="help">
+          <div className="text-muted-foreground flex items-center gap-2">
+            <CircleHelp className="h-4 w-4" />
+            <p>help</p>
+          </div>
+        </Link>
       </div>
     </div>
   );
