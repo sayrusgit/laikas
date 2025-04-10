@@ -1,6 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Info } from 'lucide-react';
 import React, { useCallback, useEffect } from 'react';
 
 interface Props {
@@ -64,16 +62,6 @@ function TimeOptions({ time, setTime }: Props) {
         <Button className="h-6" onClick={(e) => handleClick(e, 3600)} variant="outline">
           60m
         </Button>
-        <TooltipProvider>
-          <Tooltip delayDuration={200}>
-            <TooltipTrigger asChild>
-              <Info className="text-muted-foreground h-4 w-4" />
-            </TooltipTrigger>
-            <TooltipContent align="start">
-              <p>Press Ctrl to decrease time</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ export const sounds = [
   },
   {
     title: 'SMS',
-    filename: 'sms1.mp3',
+    filename: 'sms.mp3',
   },
   {
     title: 'Choir',

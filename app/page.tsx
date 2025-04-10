@@ -2,6 +2,7 @@
 
 import Controls from '@/components/controls';
 import TimeOptions from '@/components/time-options';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
 import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
 import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
@@ -10,6 +11,7 @@ import useTimerData from '@/lib/hooks/use-timer-data';
 import { playAudio } from '@/lib/lib';
 import { cn } from '@/lib/utils';
 import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
+import { CircleHelp } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -58,7 +60,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-225px)] flex-col justify-center gap-15">
+    <div className="flex h-[calc(100vh-225px)] flex-col items-center justify-center gap-15">
       <div className="flex flex-col justify-center">
         <div className="flex flex-col items-center gap-3 transition-transform duration-700">
           <NumberFlowGroup>
@@ -97,15 +99,21 @@ export default function Home() {
           <TimeOptions time={time} setTime={setTime} />
         </div>
       </div>
-      <Controls
-        isRunning={timer.isRunning()}
-        isPaused={timer.isPaused()}
-        isTriggered={isTriggered}
-        time={time}
-        setTime={setTime}
-        pauseTimer={pauseTimer}
-        startTimer={startTimer}
-      />
+      <div className="flex flex-col items-center justify-center gap-4">
+        <Controls
+          isRunning={timer.isRunning()}
+          isPaused={timer.isPaused()}
+          isTriggered={isTriggered}
+          time={time}
+          setTime={setTime}
+          pauseTimer={pauseTimer}
+          startTimer={startTimer}
+        />
+        <div className="text-muted-foreground flex items-center gap-2">
+          <CircleHelp className="h-4 w-4" />
+          <p>help</p>
+        </div>
+      </div>
     </div>
   );
 }

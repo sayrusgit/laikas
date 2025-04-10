@@ -15,4 +15,4 @@ Feel free to open PR if you think something is missing.
 
 ## License
 
-GNU GPL-3.0
+GPL-3.0

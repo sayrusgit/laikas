@@ -56,11 +56,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    @apply overflow-y-scroll;
   }
 }
 
 .bg-noise {
-  background-image: url('../public/noise.png');
+  background-image: url("../public/noise.png");
   background-size: 256px;
   background-repeat: repeat;
   position: fixed;
@@ -69,6 +70,6 @@
   top: 0;
   left: 0;
   opacity: 2%;
-/*  z-index: -1;*/
+  /*  z-index: -1;*/
   pointer-events: none;
 }

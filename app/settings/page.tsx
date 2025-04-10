@@ -1,7 +1,6 @@
 'use client';
 
 import SettingsSoundItem from '@/components/settings-sound-item';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import SliderTicks from '@/components/ui/slider-ticks';
 import SoundRepeatsItem from '@/components/ui/sound-repeats-item';
@@ -10,9 +9,12 @@ import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
 import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
 import { playAudio } from '@/lib/lib';
 import { sounds } from '@/lib/sounds';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 function Page() {
+  const router = useRouter();
+
   const [currentSound, setCurrentSound] = useCurrentSound();
   const [currentVolume, setCurrentVolume] = useCurrentVolume();
   const [repeats, setRepeats] = useSoundRepeats();

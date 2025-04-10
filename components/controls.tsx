@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Pause, Play, RotateCcw, Settings, StepForward, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { type SetStateAction, useCallback, useEffect } from 'react';
 
 interface Props {
@@ -23,12 +24,16 @@ function Controls({
   time,
   setTime,
 }: Props) {
+  const router = useRouter();
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Enter') startTimer();
       if (e.key === ' ' && !isPaused && isTriggered) pauseTimer();
       if (e.key === ' ' && isPaused && isTriggered) startTimer();
       if (e.key === 'Backspace') setTime(0);
+      if (e.key === '/') router.push('/settings');
+      if (e.key === 'h') router.push('/help');
     },
     [startTimer, pauseTimer, isPaused, setTime, isTriggered],
   );
@@ -43,7 +48,7 @@ function Controls({
 
   return (
     <motion.div
-      className="flex justify-center gap-5"
+      className="flex items-center justify-center gap-5"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, ease: 'easeOut' }}
@@ -80,7 +85,7 @@ function Controls({
         </Button>
       )}
       <motion.span whileTap={{ scale: 0.9 }}>
-        <Link href="/settings">
+        <Link href="/settings" title="Settings">
           <Button size="icon">
             <Settings />
           </Button>

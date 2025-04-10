@@ -24,10 +24,9 @@ function SettingsSoundItem({ handleAudio, title, filename, currentSound, setCurr
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2.5">
         <p>{title}</p>
-        <Play
-          className="size-3.5 cursor-pointer transition-all ease-in-out hover:size-4"
-          onClick={() => handleAudio(filename)}
-        />
+        <button type="button" aria-label="Play sound" onClick={() => handleAudio(filename)}>
+          <Play className="size-3.5 cursor-pointer" role="button" />
+        </button>
       </div>
       <Checkbox
         id={filename}
