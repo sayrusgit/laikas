@@ -26,4 +26,4 @@ Feel free to open PR if you think something is missing.
 
 ## License
 
-Laikas is [GPL-3.0](LICENSE). licensed.
+Laikas is [GPL-3.0](LICENSE) licensed.
