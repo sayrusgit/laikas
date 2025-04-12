@@ -38,7 +38,7 @@ function TimeOptions({ time, setTime }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+    <div className="xs:flex-row flex flex-col items-center justify-center gap-4">
       <div className="flex items-center gap-4">
         {process.env.NODE_ENV === 'development' && (
           <Button className="h-6" onClick={(e) => handleClick(e, 1)} variant="outline">
@@ -51,11 +51,11 @@ function TimeOptions({ time, setTime }: Props) {
         <Button className="h-6" onClick={(e) => handleClick(e, 300)} variant="outline">
           5m
         </Button>
+      </div>
+      <div className="flex items-center gap-4">
         <Button className="h-6" onClick={(e) => handleClick(e, 600)} variant="outline">
           10m
         </Button>
-      </div>
-      <div className="flex items-center gap-4">
         <Button className="h-6" onClick={(e) => handleClick(e, 1200)} variant="outline">
           20m
         </Button>

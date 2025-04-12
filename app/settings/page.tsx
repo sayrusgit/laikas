@@ -1,6 +1,7 @@
 'use client';
 
 import SettingsSoundItem from '@/components/settings-sound-item';
+import SettingsThemeItem from '@/components/settings-theme-item';
 import { Card } from '@/components/ui/card';
 import SliderTicks from '@/components/ui/slider-ticks';
 import SoundRepeatsItem from '@/components/ui/sound-repeats-item';
@@ -9,9 +10,13 @@ import { useCurrentVolume } from '@/lib/hooks/use-current-volume';
 import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
 import { playAudio } from '@/lib/lib';
 import { sounds } from '@/lib/sounds';
+import { themes } from '@/lib/themes';
+import { useTheme } from 'next-themes';
 import React from 'react';
 
 function Page() {
+  const { setTheme } = useTheme();
+
   const [currentSound, setCurrentSound] = useCurrentSound();
   const [currentVolume, setCurrentVolume] = useCurrentVolume();
   const [repeats, setRepeats] = useSoundRepeats();
@@ -24,6 +29,17 @@ function Page() {
     <div>
       <h1 className="text-center text-2xl">settings</h1>
       <Card className="mt-5 p-4">
+        <p className="text-center text-xl">theme</p>
+        <div className="flex flex-col gap-3">
+          {themes.map((theme) => (
+            <SettingsThemeItem
+              title={theme.label}
+              colors={theme.colors}
+              key={theme.label + theme.name}
+              onClick={() => setTheme(theme.name)}
+            />
+          ))}
+        </div>
         <p className="text-center text-xl">sound volume</p>
         <div>
           <SliderTicks

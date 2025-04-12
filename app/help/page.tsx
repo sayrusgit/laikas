@@ -9,7 +9,7 @@ function Page() {
       <h1 className="text-center text-2xl">help</h1>
       <div className="mt-4">
         <p className="text-xl">keybinds</p>
-        <div>You can use the website using just your keyboard — no mouse needed</div>
+        <div>You can use the website with just your keyboard — no mouse required</div>
         <div className="mt-4 flex flex-col gap-3">
           <p>
             <Kbd>1</Kbd> <Kbd>2</Kbd> <Kbd>3</Kbd> <Kbd>4</Kbd> <Kbd>5</Kbd> to increase timer by
@@ -28,10 +28,10 @@ function Page() {
             <Kbd>Backspace</Kbd> to reset timer
           </p>
           <p>
-            <Kbd>/</Kbd> to navigate to the settings page
+            <Kbd>/</Kbd> go to settings
           </p>
           <p>
-            <Kbd>h</Kbd> to navigate to the help page
+            <Kbd>h</Kbd> go to help
           </p>
         </div>
       </div>

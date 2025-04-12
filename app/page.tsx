@@ -37,7 +37,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-225px)] flex-col items-center justify-center gap-15">
+    <div className="xs:gap-15 flex h-[calc(100vh-225px)] flex-col items-center justify-center gap-9">
       <div className="flex flex-col justify-center">
         <div className="flex flex-col items-center gap-3 transition-transform duration-700">
           <NumberFlowGroup>
@@ -76,7 +76,7 @@ export default function Home() {
           <TimeOptions time={time} setTime={setTime} />
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-6">
         <Controls
           isRunning={timer.isRunning()}
           isPaused={timer.isPaused()}
