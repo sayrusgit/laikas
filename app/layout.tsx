@@ -1,10 +1,15 @@
+import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import { THEMES_LIST } from '@/lib/themes';
 import { dm_mono } from '@/styles/fonts';
 import { ThemeProvider } from 'next-themes';
-import dynamic from 'next/dynamic';
+
+export const metadata: Metadata = {
+  title: 'laikas',
+  description: 'Laikas — simple and highly customizable timer',
+};
 
 export default function RootLayout({
   children,
@@ -30,6 +35,7 @@ export default function RootLayout({
           <Header />
           <main className="mx-auto max-w-[600px] px-4">{children}</main>
           <Footer />
+          <div className="bg-noise" />
         </ThemeProvider>
       </body>
     </html>
