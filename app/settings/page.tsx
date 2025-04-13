@@ -15,7 +15,7 @@ import { useTheme } from 'next-themes';
 import React from 'react';
 
 function Page() {
-  const { setTheme } = useTheme();
+  const { theme: currentTheme, setTheme } = useTheme();
 
   const [currentSound, setCurrentSound] = useCurrentSound();
   const [currentVolume, setCurrentVolume] = useCurrentVolume();
@@ -34,7 +34,9 @@ function Page() {
           {themes.map((theme) => (
             <SettingsThemeItem
               title={theme.label}
+              name={theme.name}
               colors={theme.colors}
+              currentTheme={currentTheme}
               key={theme.label + theme.name}
               onClick={() => setTheme(theme.name)}
             />
