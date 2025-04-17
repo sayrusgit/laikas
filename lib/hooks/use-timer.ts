@@ -79,8 +79,6 @@ const useTimer = ({
 
       setIsRunning(timer.isRunning());
       setIsPaused(timer.isPaused());
-
-      document.title = `${newTimer.getTimeValues().toString()} | laikas`;
     };
 
     newTimer.on('started', onStarted);

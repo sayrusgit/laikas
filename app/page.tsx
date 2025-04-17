@@ -23,9 +23,20 @@ export default function Home() {
   const [repeats] = useSoundRepeats();
 
   useEffect(() => {
-    if (state.isTargetAchieved) {
-      playAudio(currentSound, currentVolume, repeats);
-    }
+    timer.on('secondsUpdated', () => {
+      document.title = `${timer.getTimeValues().toString()} | laikas`;
+    });
+    timer.on('paused', () => {
+      document.title = 'paused | laikas';
+    });
+
+    return () => {
+      document.title = 'laikas';
+    };
+  }, [timer]);
+
+  useEffect(() => {
+    if (state.isTargetAchieved) playAudio(currentSound, currentVolume, repeats);
   }, [state.isTargetAchieved]);
 
   const startTimer = () => {
