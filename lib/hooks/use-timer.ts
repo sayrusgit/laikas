@@ -10,7 +10,8 @@ interface TimerHookConfig {
 
 type TimerHookReturn = [
   Timer,
-  { isTargetAchieved: boolean; isRunning: boolean; isPaused: boolean; isTriggered: boolean },
+  { isRunning: boolean; isPaused: boolean; isTriggered: boolean },
+  isTargetAchieved: boolean,
 ];
 
 const UNITS_TO_SAVE = ['days', 'hours', 'minutes', 'seconds', 'secondTenths'];
@@ -79,6 +80,8 @@ const useTimer = ({
 
       setIsRunning(timer.isRunning());
       setIsPaused(timer.isPaused());
+
+      document.title = `${newTimer.getTimeValues().toString()} | laikas`;
     };
 
     newTimer.on('started', onStarted);
@@ -97,7 +100,7 @@ const useTimer = ({
     };
   }, [startValues, target, precision, countdown]);
 
-  return [timer, { isTargetAchieved, isRunning, isPaused, isTriggered }];
+  return [timer, { isRunning, isPaused, isTriggered }, isTargetAchieved];
 };
 
 export default useTimer;

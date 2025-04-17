@@ -1,5 +1,5 @@
 import type { Precision, TimerValues } from 'easytimer.js';
-import { type Dispatch, type SetStateAction, useMemo, useState } from 'react';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
 interface ITimerConfig {
   startValues?: TimerValues;
@@ -13,12 +13,17 @@ type TimerDataHookReturn = [ITimerConfig, Dispatch<SetStateAction<number>>, numb
 
 const useTimerData = (): TimerDataHookReturn => {
   const [time, setTime] = useState<number>(0);
-  const timerData = useMemo<ITimerConfig>(() => {
-    return {
+  const [timerData, setTimerData] = useState<ITimerConfig>({
+    startValues: { seconds: time },
+    countdown: true,
+    updateWhenTargetAchieved: true,
+  });
+
+  useEffect(() => {
+    setTimerData({
+      ...timerData,
       startValues: { seconds: time },
-      countdown: true,
-      updateWhenTargetAchieved: true,
-    };
+    });
   }, [time]);
 
   return [timerData, setTime, time];

@@ -16,7 +16,7 @@ import React, { useEffect } from 'react';
 
 export default function Home() {
   const [timerData, setTime, time] = useTimerData();
-  const [timer, state] = useTimer(timerData);
+  const [timer, state, isTargetAchieved] = useTimer(timerData);
 
   const [currentSound] = useCurrentSound();
   const [currentVolume] = useCurrentVolume();
@@ -36,8 +36,8 @@ export default function Home() {
   }, [timer]);
 
   useEffect(() => {
-    if (state.isTargetAchieved) playAudio(currentSound, currentVolume, repeats);
-  }, [state.isTargetAchieved]);
+    if (isTargetAchieved) playAudio(currentSound, currentVolume, repeats);
+  }, [isTargetAchieved]);
 
   const startTimer = () => {
     timer.start();
