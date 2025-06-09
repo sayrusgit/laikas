@@ -24,7 +24,7 @@ self.addEventListener('message', (e: MessageEvent<WorkerMessage>) => {
         clearInterval(intervalId);
         self.postMessage({ timeLeft: 0, finished: true });
       }
-    }, 100);
+    }, 1000);
   } else if (action === 'stop') {
     if (intervalId) {
       clearInterval(intervalId);

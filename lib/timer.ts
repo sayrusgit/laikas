@@ -60,56 +60,54 @@ export default function useTimer(): [TimerData, TimerControls] {
     isPaused,
   };
 
-  const controls: TimerControls = useMemo(
-    () => ({
-      start: () => {
-        if (timeLeft > 0) {
-          // resume existing timer
+  const controls: TimerControls = {
+    start: () => {
+      if (timeLeft > 0) {
+        // resume existing timer
+        setIsRunning(true);
+        setIsPaused(false);
+
+        const message: WorkerMessage = {
+          action: 'start',
+          duration: timeLeft * 1000,
+        };
+
+        workerRef?.current?.postMessage(message);
+      } else {
+        // start new timer
+        if (initialTime > 0) {
+          setTimeLeft(initialTime);
           setIsRunning(true);
           setIsPaused(false);
+          setIsFinished(false);
 
           const message: WorkerMessage = {
             action: 'start',
-            duration: timeLeft * 1000,
+            duration: initialTime * 1000,
           };
 
           workerRef?.current?.postMessage(message);
-        } else {
-          // start new timer
-          if (initialTime > 0) {
-            setTimeLeft(initialTime);
-            setIsRunning(true);
-            setIsPaused(false);
-            setIsFinished(false);
-
-            const message: WorkerMessage = {
-              action: 'start',
-              duration: initialTime * 1000,
-            };
-
-            workerRef?.current?.postMessage(message);
-          }
         }
-      },
-      pause: () => {
-        setIsRunning(false);
-        setIsPaused(true);
-        workerRef?.current?.postMessage({ action: 'stop' });
-      },
-      stop: () => {
-        setTimeLeft(0);
-        setInitialTime(0);
-        setIsRunning(false);
-        setIsPaused(false);
-        setIsFinished(false);
-      },
-      set: (secs: number) => {
-        setInitialTime(secs);
-        setTimeLeft(secs);
-      },
-    }),
-    [initialTime],
-  );
+      }
+    },
+    pause: () => {
+      workerRef?.current?.postMessage({ action: 'stop' });
+      setIsRunning(false);
+      setIsPaused(true);
+    },
+    stop: () => {
+      workerRef?.current?.postMessage({ action: 'stop' });
+      setTimeLeft(0);
+      setInitialTime(0);
+      setIsRunning(false);
+      setIsPaused(false);
+      setIsFinished(false);
+    },
+    set: (secs: number) => {
+      setInitialTime(secs);
+      setTimeLeft(secs);
+    },
+  };
 
   return [data, controls];
 }
