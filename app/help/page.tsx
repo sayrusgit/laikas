@@ -25,7 +25,7 @@ function Page() {
             <Kbd>Space</Kbd> to pause timer
           </p>
           <p>
-            <Kbd>Backspace</Kbd> to reset timer
+            <Kbd>Backspace</Kbd> to reset or stop timer
           </p>
           <p>
             <Kbd>/</Kbd> go to settings

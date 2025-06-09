@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 
 interface Props {
   time: number;
-  setTime: React.Dispatch<React.SetStateAction<number>>;
+  setTime: (secs: number) => void;
 }
 
 function TimeOptions({ time, setTime }: Props) {

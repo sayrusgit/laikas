@@ -6,36 +6,29 @@ import { useRouter } from 'next/navigation';
 import React, { type SetStateAction, useCallback, useEffect } from 'react';
 
 interface Props {
+  time: number;
+  set: (secs: number) => void;
   isRunning: boolean;
   isPaused: boolean;
-  isTriggered: boolean;
   startTimer: () => void;
   pauseTimer: () => void;
-  time: number;
-  setTime: React.Dispatch<SetStateAction<number>>;
+  stop: () => void;
 }
 
-function Controls({
-  isRunning,
-  isPaused,
-  isTriggered,
-  startTimer,
-  pauseTimer,
-  time,
-  setTime,
-}: Props) {
+function Controls({ isRunning, isPaused, startTimer, pauseTimer, time, set, stop }: Props) {
   const router = useRouter();
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Enter') startTimer();
-      if (e.key === ' ' && !isPaused && isTriggered) pauseTimer();
-      if (e.key === ' ' && isPaused && isTriggered) startTimer();
-      if (e.key === 'Backspace') setTime(0);
+      if (e.key === ' ' && !isPaused) pauseTimer();
+      if (e.key === ' ' && isPaused) startTimer();
+      if (e.key === 'Backspace' && !isRunning && !isPaused) set(0);
+      if (e.key === 'Backspace' && isPaused) stop();
       if (e.key === '/') router.push('/settings');
       if (e.key === 'h') router.push('/help');
     },
-    [startTimer, pauseTimer, isPaused, setTime, isTriggered],
+    [startTimer, pauseTimer, isPaused, set],
   );
 
   useEffect(() => {
@@ -73,13 +66,13 @@ function Controls({
       )}
       {isRunning ||
         (isPaused && (
-          <Button onClick={() => setTime(0)} size="lg">
+          <Button onClick={() => stop()} size="lg">
             <X />
             Cancel
           </Button>
         ))}
       {!isRunning && !isPaused && (
-        <Button onClick={() => setTime(0)} size="lg">
+        <Button onClick={() => set(0)} size="lg" disabled={!time}>
           <RotateCcw />
           Reset
         </Button>
