@@ -24,7 +24,6 @@ export default function Home() {
     if (data.isFinished) playAudio(currentSound, currentVolume, repeats);
   }, [data.isFinished]);
 
-  console.log(data);
   return (
     <div className="xs:gap-15 flex h-[calc(100vh-225px)] flex-col items-center justify-center gap-9">
       <div className="flex flex-col justify-center">
