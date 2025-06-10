@@ -1,26 +1,8 @@
+import type { TimerControls, TimerData, TimerTime } from '@/lib/timer-types';
 import type { WorkerMessage } from '@/lib/timer-worker';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-interface TimerData {
-  initialTime: number;
-  time: {
-    hrs: number;
-    mins: number;
-    secs: number;
-  };
-  isRunning: boolean;
-  isFinished: boolean;
-  isPaused: boolean;
-}
-
-interface TimerControls {
-  set: (secs: number) => void;
-  start: () => void;
-  pause: () => void;
-  stop: () => void;
-}
-
-export default function useTimer(): [TimerData, TimerControls] {
+export default function useTimer(): [TimerTime, TimerData, TimerControls] {
   const workerRef = useRef<Worker | null>(null);
   const [initialTime, setInitialTime] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -48,66 +30,71 @@ export default function useTimer(): [TimerData, TimerControls] {
     };
   }, []);
 
-  const data: TimerData = {
-    initialTime,
-    time: {
-      hrs: Math.floor(timeLeft / 3600),
-      mins: Math.floor((timeLeft % 3600) / 60),
-      secs: timeLeft % 60,
-    },
-    isFinished,
-    isRunning,
-    isPaused,
+  const time = {
+    hrs: Math.floor(timeLeft / 3600),
+    mins: Math.floor((timeLeft % 3600) / 60),
+    secs: timeLeft % 60,
   };
 
-  const controls: TimerControls = {
-    start: () => {
-      if (timeLeft > 0) {
-        // resume existing timer
-        setIsRunning(true);
-        setIsPaused(false);
+  const data: TimerData = useMemo(() => {
+    return {
+      initialTime,
+      isFinished,
+      isRunning,
+      isPaused,
+    };
+  }, [initialTime, isFinished, isRunning, isPaused]);
 
-        const message: WorkerMessage = {
-          action: 'start',
-          duration: timeLeft * 1000,
-        };
-
-        workerRef?.current?.postMessage(message);
-      } else {
-        // start new timer
-        if (initialTime > 0) {
-          setTimeLeft(initialTime);
+  const controls: TimerControls = useMemo(() => {
+    return {
+      start: () => {
+        if (timeLeft > 0) {
+          // resume existing timer
           setIsRunning(true);
           setIsPaused(false);
-          setIsFinished(false);
 
           const message: WorkerMessage = {
             action: 'start',
-            duration: initialTime * 1000,
+            duration: timeLeft * 1000,
           };
 
           workerRef?.current?.postMessage(message);
-        }
-      }
-    },
-    pause: () => {
-      workerRef?.current?.postMessage({ action: 'stop' });
-      setIsRunning(false);
-      setIsPaused(true);
-    },
-    stop: () => {
-      workerRef?.current?.postMessage({ action: 'stop' });
-      setTimeLeft(0);
-      setInitialTime(0);
-      setIsRunning(false);
-      setIsPaused(false);
-      setIsFinished(false);
-    },
-    set: (secs: number) => {
-      setInitialTime(secs);
-      setTimeLeft(secs);
-    },
-  };
+        } else {
+          // start new timer
+          if (initialTime > 0) {
+            setTimeLeft(initialTime);
+            setIsRunning(true);
+            setIsPaused(false);
+            setIsFinished(false);
 
-  return [data, controls];
+            const message: WorkerMessage = {
+              action: 'start',
+              duration: initialTime * 1000,
+            };
+
+            workerRef?.current?.postMessage(message);
+          }
+        }
+      },
+      pause: () => {
+        workerRef?.current?.postMessage({ action: 'stop' });
+        setIsRunning(false);
+        setIsPaused(true);
+      },
+      stop: () => {
+        workerRef?.current?.postMessage({ action: 'stop' });
+        setTimeLeft(0);
+        setInitialTime(0);
+        setIsRunning(false);
+        setIsPaused(false);
+        setIsFinished(false);
+      },
+      set: (secs: number) => {
+        setInitialTime(secs);
+        setTimeLeft(secs);
+      },
+    };
+  }, [workerRef, initialTime, isPaused]);
+
+  return [time, data, controls];
 }

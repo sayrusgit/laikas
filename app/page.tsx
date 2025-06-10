@@ -14,7 +14,7 @@ import Link from 'next/link';
 import React, { useEffect } from 'react';
 
 export default function Home() {
-  const [data, controls] = useTimer();
+  const [time, data, controls] = useTimer();
 
   const [currentSound] = useCurrentSound();
   const [currentVolume] = useCurrentVolume();
@@ -38,11 +38,11 @@ export default function Home() {
                 },
               )}
             >
-              <NumberFlow trend={-1} value={data.time.hrs} format={{ minimumIntegerDigits: 2 }} />
+              <NumberFlow trend={-1} value={time.hrs} format={{ minimumIntegerDigits: 2 }} />
               <NumberFlow
                 prefix=":"
                 trend={-1}
-                value={data.time.mins}
+                value={time.mins}
                 digits={{ 1: { max: 5 } }}
                 format={{ minimumIntegerDigits: 2 }}
                 willChange
@@ -50,7 +50,7 @@ export default function Home() {
               <NumberFlow
                 prefix=":"
                 trend={-1}
-                value={data.time.secs}
+                value={time.secs}
                 digits={{ 1: { max: 5 } }}
                 format={{ minimumIntegerDigits: 2 }}
                 willChange
