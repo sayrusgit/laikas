@@ -57,7 +57,7 @@ export default function Home() {
               />
             </div>
           </NumberFlowGroup>
-          <TimeOptions time={data.initialTime} setTime={controls.set} />
+          <TimeOptions time={data.initialTime} setTime={controls.set} isRunning={data.isRunning} />
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-6">

@@ -4,11 +4,14 @@ import React, { useCallback, useEffect } from 'react';
 interface Props {
   time: number;
   setTime: (secs: number) => void;
+  isRunning: boolean;
 }
 
-function TimeOptions({ time, setTime }: Props) {
+function TimeOptions({ time, setTime, isRunning }: Props) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      if (isRunning) return;
+
       if (e.key === '1') setTime(time + 15);
       if (e.key === '2') setTime(time + 300);
       if (e.key === '3') setTime(time + 600);
@@ -21,7 +24,7 @@ function TimeOptions({ time, setTime }: Props) {
       if (e.key === '$') setTime(1200 > time ? time - time : time - 1200);
       if (e.key === '%') setTime(3600 > time ? time - time : time - 3600);
     },
-    [time, setTime],
+    [time, setTime, isRunning],
   );
 
   useEffect(() => {
