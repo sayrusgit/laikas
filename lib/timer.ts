@@ -52,6 +52,7 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
           // resume existing timer
           setIsRunning(true);
           setIsPaused(false);
+          setIsFinished(false);
 
           const message: WorkerMessage = {
             action: 'start',
