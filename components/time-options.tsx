@@ -10,7 +10,7 @@ interface Props {
 function TimeOptions({ time, setTime, isRunning }: Props) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.ctrlKey || isRunning) return;
+      if (e.ctrlKey || e.altKey || isRunning) return;
 
       if (e.key === '1') setTime(time + 15);
       if (e.key === '2') setTime(time + 300);
