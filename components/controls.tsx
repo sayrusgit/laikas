@@ -20,7 +20,7 @@ function Controls({ isRunning, isPaused, startTimer, pauseTimer, time, set, stop
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Enter') startTimer();
+      if (e.key === 'Enter' && !isRunning) startTimer();
       if (e.key === ' ' && !isPaused) pauseTimer();
       if (e.key === ' ' && isPaused) startTimer();
       if (e.key === 'Backspace' && !isRunning && !isPaused) set(0);
@@ -28,7 +28,7 @@ function Controls({ isRunning, isPaused, startTimer, pauseTimer, time, set, stop
       if (e.key === '/') router.push('/settings');
       if (e.key === 'h') router.push('/help');
     },
-    [startTimer, pauseTimer, isPaused, set],
+    [startTimer, pauseTimer, isPaused, set, isRunning],
   );
 
   useEffect(() => {
