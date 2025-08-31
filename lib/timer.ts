@@ -1,6 +1,6 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TimerControls, TimerData, TimerTime } from '@/lib/timer-types';
 import type { WorkerMessage } from '@/lib/timer-worker';
-import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function useTimer(): [TimerTime, TimerData, TimerControls] {
   const workerRef = useRef<Worker | null>(null);
@@ -26,7 +26,10 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
     };
 
     return () => {
-      if (workerRef.current) workerRef.current.terminate();
+      if (workerRef.current) {
+        workerRef.current.postMessage({ action: 'stop' });
+        workerRef.current.terminate();
+      }
     };
   }, []);
 

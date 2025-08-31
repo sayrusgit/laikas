@@ -11,14 +11,26 @@ export interface WorkerResponse {
 let intervalId: NodeJS.Timeout | null = null;
 let endTime = 0;
 
+const cleanupTimer = () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+};
+
 self.addEventListener('message', (e: MessageEvent<WorkerMessage>) => {
   const { action, duration } = e.data;
 
   if (action === 'start') {
+    cleanupTimer();
+
     endTime = Date.now() + duration;
     intervalId = setInterval(() => {
       const remaining = Math.max(0, endTime - Date.now());
-      self.postMessage({ timeLeft: Math.ceil(remaining / 1000), finished: false });
+      self.postMessage({
+        timeLeft: Math.ceil(remaining / 1000),
+        finished: false,
+      });
 
       if (remaining <= 0 && intervalId) {
         clearInterval(intervalId);
@@ -26,9 +38,10 @@ self.addEventListener('message', (e: MessageEvent<WorkerMessage>) => {
       }
     }, 1000);
   } else if (action === 'stop') {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
+    cleanupTimer();
   }
+});
+
+self.addEventListener('beforeunload', () => {
+  cleanupTimer();
 });
