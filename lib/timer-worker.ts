@@ -4,15 +4,15 @@ export interface WorkerMessage {
 }
 
 export interface WorkerResponse {
-  finished: true;
+  finished: boolean;
   timeLeft: number;
 }
 
-let intervalId: NodeJS.Timeout | null = null;
+let intervalId: number | null = null;
 let endTime = 0;
 
 const cleanupTimer = () => {
-  if (intervalId) {
+  if (intervalId !== null) {
     clearInterval(intervalId);
     intervalId = null;
   }
@@ -25,23 +25,20 @@ self.addEventListener('message', (e: MessageEvent<WorkerMessage>) => {
     cleanupTimer();
 
     endTime = Date.now() + duration;
+
     intervalId = setInterval(() => {
       const remaining = Math.max(0, endTime - Date.now());
-      self.postMessage({
-        timeLeft: Math.ceil(remaining / 1000),
-        finished: false,
-      });
+      const timeLeft = Math.ceil(remaining / 1000);
 
-      if (remaining <= 0 && intervalId) {
-        clearInterval(intervalId);
+      // Only post message if there's a meaningful update
+      if (remaining <= 0) {
+        cleanupTimer();
         self.postMessage({ timeLeft: 0, finished: true });
+      } else {
+        self.postMessage({ timeLeft, finished: false });
       }
-    }, 1000);
+    }, 1000) as unknown as number;
   } else if (action === 'stop') {
     cleanupTimer();
   }
-});
-
-self.addEventListener('beforeunload', () => {
-  cleanupTimer();
 });

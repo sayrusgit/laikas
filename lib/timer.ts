@@ -21,7 +21,7 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
         setIsRunning(false);
         setIsFinished(true);
       } else {
-        setTimeLeft(newTimeLeft);
+        setTimeLeft((prev) => (prev !== newTimeLeft ? newTimeLeft : prev));
       }
     };
 
@@ -29,15 +29,19 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
       if (workerRef.current) {
         workerRef.current.postMessage({ action: 'stop' });
         workerRef.current.terminate();
+        workerRef.current = null;
       }
     };
   }, []);
 
-  const time = {
-    hrs: Math.floor(timeLeft / 3600),
-    mins: Math.floor((timeLeft % 3600) / 60),
-    secs: timeLeft % 60,
-  };
+  const time = useMemo(
+    () => ({
+      hrs: Math.floor(timeLeft / 3600),
+      mins: Math.floor((timeLeft % 3600) / 60),
+      secs: timeLeft % 60,
+    }),
+    [timeLeft],
+  );
 
   const data: TimerData = useMemo(() => {
     return {
@@ -98,7 +102,7 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
         setTimeLeft(secs);
       },
     };
-  }, [workerRef, initialTime, isPaused]);
+  }, [timeLeft, initialTime]);
 
   return [time, data, controls];
 }

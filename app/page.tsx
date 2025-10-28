@@ -1,5 +1,9 @@
 'use client';
 
+import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
+import { CircleHelp } from 'lucide-react';
+import Link from 'next/link';
+import React, { useEffect } from 'react';
 import Controls from '@/components/controls';
 import TimeOptions from '@/components/time-options';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
@@ -8,10 +12,6 @@ import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
 import { playAudio } from '@/lib/lib';
 import useTimer from '@/lib/timer';
 import { cn } from '@/lib/utils';
-import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
-import { CircleHelp } from 'lucide-react';
-import Link from 'next/link';
-import React, { useEffect } from 'react';
 
 export default function Home() {
   const [time, data, controls] = useTimer();
