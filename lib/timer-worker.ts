@@ -42,3 +42,7 @@ self.addEventListener('message', (e: MessageEvent<WorkerMessage>) => {
     cleanupTimer();
   }
 });
+
+self.addEventListener('beforeunload', () => {
+  cleanupTimer();
+});

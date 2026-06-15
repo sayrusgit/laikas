@@ -4,11 +4,35 @@ import type { WorkerMessage } from '@/lib/timer-worker';
 
 export default function useTimer(): [TimerTime, TimerData, TimerControls] {
   const workerRef = useRef<Worker | null>(null);
+  const timeLeftRef = useRef(0);
+  const initialTimeRef = useRef(0);
+  const isVisibleRef = useRef(true);
   const [initialTime, setInitialTime] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+
+  timeLeftRef.current = timeLeft;
+  initialTimeRef.current = initialTime;
+
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      const visible = document.visibilityState === 'visible';
+      isVisibleRef.current = visible;
+
+      if (visible) {
+        setTimeLeft(timeLeftRef.current);
+      }
+    };
+
+    isVisibleRef.current = document.visibilityState === 'visible';
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, []);
 
   useEffect(() => {
     workerRef.current = new Worker(new URL('timer-worker.ts', import.meta.url));
@@ -17,11 +41,16 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
       const { timeLeft: newTimeLeft, finished } = e.data;
 
       if (finished) {
+        timeLeftRef.current = 0;
         setTimeLeft(0);
         setIsRunning(false);
         setIsFinished(true);
       } else {
-        setTimeLeft((prev) => (prev !== newTimeLeft ? newTimeLeft : prev));
+        timeLeftRef.current = newTimeLeft;
+
+        if (isVisibleRef.current) {
+          setTimeLeft((prev) => (prev !== newTimeLeft ? newTimeLeft : prev));
+        }
       }
     };
 
@@ -55,7 +84,10 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
   const controls: TimerControls = useMemo(() => {
     return {
       start: () => {
-        if (timeLeft > 0) {
+        const currentTimeLeft = timeLeftRef.current;
+        const currentInitialTime = initialTimeRef.current;
+
+        if (currentTimeLeft > 0) {
           // resume existing timer
           setIsRunning(true);
           setIsPaused(false);
@@ -63,25 +95,24 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
 
           const message: WorkerMessage = {
             action: 'start',
-            duration: timeLeft * 1000,
+            duration: currentTimeLeft * 1000,
           };
 
           workerRef?.current?.postMessage(message);
-        } else {
+        } else if (currentInitialTime > 0) {
           // start new timer
-          if (initialTime > 0) {
-            setTimeLeft(initialTime);
-            setIsRunning(true);
-            setIsPaused(false);
-            setIsFinished(false);
+          timeLeftRef.current = currentInitialTime;
+          setTimeLeft(currentInitialTime);
+          setIsRunning(true);
+          setIsPaused(false);
+          setIsFinished(false);
 
-            const message: WorkerMessage = {
-              action: 'start',
-              duration: initialTime * 1000,
-            };
+          const message: WorkerMessage = {
+            action: 'start',
+            duration: currentInitialTime * 1000,
+          };
 
-            workerRef?.current?.postMessage(message);
-          }
+          workerRef?.current?.postMessage(message);
         }
       },
       pause: () => {
@@ -91,6 +122,8 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
       },
       stop: () => {
         workerRef?.current?.postMessage({ action: 'stop' });
+        timeLeftRef.current = 0;
+        initialTimeRef.current = 0;
         setTimeLeft(0);
         setInitialTime(0);
         setIsRunning(false);
@@ -98,11 +131,13 @@ export default function useTimer(): [TimerTime, TimerData, TimerControls] {
         setIsFinished(false);
       },
       set: (secs: number) => {
+        timeLeftRef.current = secs;
+        initialTimeRef.current = secs;
         setInitialTime(secs);
         setTimeLeft(secs);
       },
     };
-  }, [timeLeft, initialTime]);
+  }, []);
 
   return [time, data, controls];
 }

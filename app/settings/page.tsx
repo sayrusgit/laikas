@@ -1,5 +1,7 @@
 'use client';
 
+import { useTheme } from 'next-themes';
+import React from 'react';
 import SettingsSoundItem from '@/components/settings-sound-item';
 import SettingsThemeItem from '@/components/settings-theme-item';
 import { Card } from '@/components/ui/card';
@@ -11,8 +13,6 @@ import { useSoundRepeats } from '@/lib/hooks/use-sound-repeats';
 import { playAudio } from '@/lib/lib';
 import { sounds } from '@/lib/sounds';
 import { themes } from '@/lib/themes';
-import { useTheme } from 'next-themes';
-import React from 'react';
 
 function Page() {
   const { theme: currentTheme, setTheme } = useTheme();

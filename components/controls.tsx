@@ -2,7 +2,7 @@ import { Pause, Play, RotateCcw, Settings, StepForward, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { type SetStateAction, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface Props {

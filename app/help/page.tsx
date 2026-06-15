@@ -1,7 +1,7 @@
 'use client';
 
-import Kbd from '@/components/ui/kbd';
 import React from 'react';
+import Kbd from '@/components/ui/kbd';
 
 function Page() {
   return (

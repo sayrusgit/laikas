@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import React, { type HTMLProps } from 'react';
+import { cn } from '@/lib/utils';
 
 interface Props extends HTMLProps<HTMLDivElement> {
   title: string;
