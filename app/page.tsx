@@ -4,6 +4,7 @@ import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
 import { CircleHelp } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
+
 import Controls from '@/components/controls';
 import TimeOptions from '@/components/time-options';
 import { useCurrentSound } from '@/lib/hooks/use-current-sound';
@@ -25,7 +26,7 @@ export default function Home() {
   }, [data.isFinished]);
 
   return (
-    <div className="xs:gap-15 flex h-[calc(100vh-225px)] flex-col items-center justify-center gap-9">
+    <div className="flex h-[calc(100vh-225px)] flex-col items-center justify-center gap-9 xs:gap-15">
       <div className="flex flex-col justify-center">
         <div className="flex flex-col items-center gap-3 transition-transform duration-700">
           <NumberFlowGroup>
@@ -71,7 +72,7 @@ export default function Home() {
           stop={controls.stop}
         />
         <Link href="help">
-          <div className="text-muted-foreground flex items-center gap-2">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <CircleHelp className="h-4 w-4" />
             <p>help</p>
           </div>

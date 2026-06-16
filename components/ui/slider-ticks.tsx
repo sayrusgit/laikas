@@ -1,7 +1,8 @@
-import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
 import type * as SliderPrimitive from '@radix-ui/react-slider';
 import type React from 'react';
+
+import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
 
 export default function SliderTicks(
   props: React.ComponentProps<typeof SliderPrimitive.Root> & {
@@ -17,7 +18,7 @@ export default function SliderTicks(
     <div className="*:not-first:mt-4">
       <Slider max={max} step={1} aria-label="Slider with ticks" {...props} />
       <span
-        className="text-muted-foreground mt-3 flex w-full items-center justify-between gap-1 px-2.5 text-xs font-medium"
+        className="mt-3 flex w-full items-center justify-between gap-1 px-2.5 text-xs font-medium text-muted-foreground"
         aria-hidden="true"
       >
         {ticks.map((_, i) => (
@@ -26,7 +27,7 @@ export default function SliderTicks(
             className="flex w-0 flex-col items-center justify-center gap-2"
           >
             <span
-              className={cn('bg-muted-foreground/70 h-1 w-px', i % skipInterval !== 0 && 'h-0.5')}
+              className={cn('h-1 w-px bg-muted-foreground/70', i % skipInterval !== 0 && 'h-0.5')}
             />
             <span className={cn(i % skipInterval !== 0 && 'opacity-0')}>{i}</span>
           </span>

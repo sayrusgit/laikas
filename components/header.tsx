@@ -1,11 +1,12 @@
 'use client';
 
-import { themes } from '@/lib/themes';
-import { red_hat_mono } from '@/styles/fonts';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+
+import { themes } from '@/lib/themes';
+import { red_hat_mono } from '@/styles/fonts';
 
 function Header() {
   const { theme } = useTheme();

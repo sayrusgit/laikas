@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+
 import { Button } from '@/components/ui/button';
 
 interface Props {
@@ -41,7 +42,7 @@ function TimeOptions({ time, setTime, isRunning }: Props) {
   };
 
   return (
-    <div className="xs:flex-row flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-4 xs:flex-row">
       <div className="flex items-center gap-4">
         {process.env.NODE_ENV === 'development' && (
           <Button

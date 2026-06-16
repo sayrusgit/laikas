@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "./themes.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './themes.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -43,7 +43,7 @@
 }
 
 .bg-noise {
-  background-image: url("../public/noise.png");
+  background-image: url('../public/noise.png');
   background-size: 256px;
   background-repeat: repeat;
   position: fixed;

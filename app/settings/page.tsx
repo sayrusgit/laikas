@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import React from 'react';
+
 import SettingsSoundItem from '@/components/settings-sound-item';
 import SettingsThemeItem from '@/components/settings-theme-item';
 import { Card } from '@/components/ui/card';

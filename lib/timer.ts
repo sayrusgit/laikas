@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+
 import type { TimerControls, TimerData, TimerTime } from '@/lib/timer-types';
 import type { WorkerMessage } from '@/lib/timer-worker';
 
